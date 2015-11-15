@@ -175,11 +175,11 @@ For this analysis we will use the ggplot2 package. First we will create a new da
   
 ```{r echo=TRUE}
 # Create variable StepsXintervalCompleteData which will summarize the mean number of steps by interval for weekend and weekdays
-StepsXintervalCompleteData <- CompleteData %>% mutate(type = ifelse(wday(date) %in% c(6,7),"Weekend","Not Weekend"))  %>% group_by(interval,type) %>% summarise(total=sum(steps))
-# Load the library ggplot2
-library(ggplot2)
-# Plot the comparative plot 
-qplot(interval, total, data=StepsXintervalCompleteData, colour=type, geom="line")
+StepsXintervalCompleteData <- CompleteData %>% mutate(type = ifelse(wday(date) %in% c(6,7),"Weekend","Not Weekend"))  %>% group_by(interval,type) %>% summarise(total=mean(steps))
+
+# Load the library lattice
+library(lattice)
+xyplot(StepsXintervalCompleteData$total ~ StepsXintervalCompleteData$interval |StepsXintervalCompleteData$type, layout = c(1,2), type = "l", ylab = "Mean number of steps", xlab = "5 minutes interval")
 ```
   
-From the last plot we can conclude that our subject is doing less steps during the weekends. The patterns seem to be similar for the most of the intervals.
+From the last plot we can conclude that our subject is doing less steps during the morning in weekend, but overall does more movement during the day in weekend than in the weekdays. Probably the subject has a sedentary job.

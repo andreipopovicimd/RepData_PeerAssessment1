@@ -64,18 +64,6 @@ We observe that their are NA values in steps variable but as indicated in the as
 ```r
 #We will use lubridate library
 library(lubridate)
-```
-
-```
-## 
-## Attaching package: 'lubridate'
-## 
-## The following object is masked _by_ '.GlobalEnv':
-## 
-##     second
-```
-
-```r
 #We will store the dataframe with in a new variable ProcessedData and alwways will keep our original data in the RawData variable
 ProcessedData <- RawData
 ProcessedData$date <- ymd(ProcessedData$date)
@@ -97,27 +85,7 @@ First of all we will create a new data frame named StepsXday where we will store
 ```r
 # Load the dplyr library
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:lubridate':
-## 
-##     intersect, setdiff, union
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
-# Summarize the totl number of steps per day in the StepsXday variable 
+# Summarize the total number of steps per day in the StepsXday variable 
 StepsXday<- ProcessedData %>% group_by(date) %>% summarise(total=sum(steps,na.rm=TRUE))
 # Calculate the mean of total steps per day
 mean(StepsXday$total)
@@ -320,13 +288,13 @@ For this analysis we will use the ggplot2 package. First we will create a new da
 
 ```r
 # Create variable StepsXintervalCompleteData which will summarize the mean number of steps by interval for weekend and weekdays
-StepsXintervalCompleteData <- CompleteData %>% mutate(type = ifelse(wday(date) %in% c(6,7),"Weekend","Not Weekend"))  %>% group_by(interval,type) %>% summarise(total=sum(steps))
-# Load the library ggplot2
-library(ggplot2)
-# Plot the comparative plot 
-qplot(interval, total, data=StepsXintervalCompleteData, colour=type, geom="line")
+StepsXintervalCompleteData <- CompleteData %>% mutate(type = ifelse(wday(date) %in% c(6,7),"Weekend","Not Weekend"))  %>% group_by(interval,type) %>% summarise(total=mean(steps))
+
+# Load the library lattice
+library(lattice)
+xyplot(StepsXintervalCompleteData$total ~ StepsXintervalCompleteData$interval |StepsXintervalCompleteData$type, layout = c(1,2), type = "l", ylab = "Mean number of steps", xlab = "5 minutes interval")
 ```
 
 ![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
   
-From the last plot we can conclude that our subject is doing less steps during the weekends. The patterns seem to be similar for the most of the intervals.
+From the last plot we can conclude that our subject is doing less steps during the morning in weekend, but overall does more movement during the day in weekend than in the weekdays. Probably the subject has a sedentary job.
