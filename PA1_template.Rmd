@@ -1,12 +1,3 @@
-Dear Peer,  
-  
-thank you for taking the time to review my work.  
-  
-At this stage of the course I guess you are as pationate about data as I am. It would be great if we could connect through [https://es.linkedin.com/in/andreipopovici](https://es.linkedin.com/in/andreipopovici).   
-  
-Best regards,  
-Andrei  
-
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
@@ -14,11 +5,29 @@ output:
     keep_md: true
 ---
 
+Dear Peer,  
+  
+thank you for taking the time to review my work.  
+  
+At this stage of the course I guess you are as passionate about data as I am. It would be great if we could connect through [https://es.linkedin.com/in/andreipopovici](https://es.linkedin.com/in/andreipopovici).   
+  
+Best regards,  
+Andrei 
+
+
 
 ## (A) Loading and preprocessing the data
 ### A1. Load the data  
 The data file is located [here](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip).  
-In the following chunk we will download the zip file, unzip it and read the raw data into myData dataframe.  
+  
+The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.  
+  
+The variables included in this data set are:  
+- steps: Number of steps taking in a 5-minute interval (missing values are coded as NA)  
+- date: The date on which the measurement was taken in YYYY-MM-DD format  
+- interval: Identifier for the 5-minute interval in which measurement was taken  
+  
+In the following chunk we will download the zip file, unzip it and read the raw data into RawData dataframe.  
 ```{r echo=TRUE}
 sourceURL="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
 #tempZIP is the temporary variable where we will save our data zip file 
@@ -35,11 +44,13 @@ rm(tempCSV)
 ```
 
 ### A2. Process and transform the data
-Let's look at the data. We expect 17568 observations and 3 varialbles: steps, date, interval.
+Let's look at the data. We expect 17568 observations and 3 varialbles: steps, date, interval.  
 ```{r echo=TRUE}
 str(RawData)
 ```
+  
 We observe that their are NA values in steps variable but as indicated in the assigment we will take care of them later. We also see that the date variable is stored as char. In the next chunk we will transform date variable from char to date format.  
+  
 ```{r echo=TRUE}
 #We will use lubridate library
 library(lubridate)
@@ -56,7 +67,7 @@ First of all we will create a new data frame named StepsXday where we will store
 ```{r echo=TRUE}
 # Load the dplyr library
 library(dplyr)
-# Summarize the totl number of steps per day in the StepsXday variable 
+# Summarize the total number of steps per day in the StepsXday variable 
 StepsXday<- ProcessedData %>% group_by(date) %>% summarise(total=sum(steps,na.rm=TRUE))
 # Calculate the mean of total steps per day
 mean(StepsXday$total)
